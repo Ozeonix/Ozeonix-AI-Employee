@@ -2,14 +2,18 @@ name: Ozeonix CI/CD & CodeRabbit Test Verification
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main, develop, my-dev]
   pull_request:
-    branches: [main, develop]
+    branches: [main, develop, my-dev]
 
 jobs:
   verify:
     name: Build, Lint & Test Pass Verification
     runs-on: ubuntu-latest
+
+    env:
+      DATABASE_URL: "postgresql://ozeonix_admin:ozeonix_secure_pass_2026@localhost:5432/ozeonix_db?schema=public"
+      NODE_ENV: test
 
     services:
       postgres:
@@ -45,10 +49,10 @@ jobs:
           cd backend
           pnpm install
 
-      - name: Generate Prisma Client
+      - name: Generate Prisma Client (Prisma 5.18.0)
         run: |
           cd database/prisma
-          npx prisma generate
+          npx prisma@5.18.0 generate --schema=schema.prisma
 
       - name: Run ESLint
         run: |
