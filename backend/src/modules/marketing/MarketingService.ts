@@ -1,4 +1,4 @@
-import { CreateCampaignInput, CreateTemplateInput } from './dto/marketing.dto.js';
+import { CreateCampaignInput } from './dto/marketing.dto.js';
 import { prisma } from '../../config/database.js';
 import { WhatsAppService } from '../../../integrations/whatsapp/WhatsAppService.js';
 import { logger } from '../../config/logger.js';
