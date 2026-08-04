@@ -8,6 +8,12 @@ import healthRoutes from './routes/health.routes.js';
 import authRoutes from './modules/auth/auth.routes.js';
 import platformRoutes from './modules/platform/platform.routes.js';
 import rbacRoutes from './modules/rbac/rbac.routes.js';
+import whatsappRoutes from './modules/whatsapp/whatsapp.routes.js';
+import aiRoutes from './modules/ai/ai.routes.js';
+import crmRoutes from './modules/crm/crm.routes.js';
+import employeeRoutes from './modules/employee/employee.routes.js';
+import marketingRoutes from './modules/marketing/marketing.routes.js';
+import dashboardRoutes from './modules/dashboard/dashboard.routes.js';
 
 const app = express();
 
@@ -27,6 +33,12 @@ app.use('/', healthRoutes);
 app.use(`${env.API_PREFIX}/auth`, authRoutes);
 app.use(`${env.API_PREFIX}/platform`, platformRoutes);
 app.use(`${env.API_PREFIX}/rbac`, rbacRoutes);
+app.use(`${env.API_PREFIX}/whatsapp`, whatsappRoutes);
+app.use(`${env.API_PREFIX}/ai`, aiRoutes);
+app.use(`${env.API_PREFIX}/crm`, crmRoutes);
+app.use(`${env.API_PREFIX}/employees`, employeeRoutes);
+app.use(`${env.API_PREFIX}/marketing`, marketingRoutes);
+app.use(`${env.API_PREFIX}/dashboard`, dashboardRoutes);
 
 // Centralized Error Handling Middleware
 app.use(errorHandlerMiddleware);

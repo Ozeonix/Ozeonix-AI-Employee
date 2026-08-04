@@ -1,0 +1,66 @@
+name: Ozeonix CI/CD & CodeRabbit Test Verification
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  verify:
+    name: Build, Lint & Test Pass Verification
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: ozeonix_admin
+          POSTGRES_PASSWORD: ozeonix_secure_pass_2026
+          POSTGRES_DB: ozeonix_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js v20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9.5.0
+
+      - name: Install Backend Dependencies
+        run: |
+          cd backend
+          pnpm install
+
+      - name: Generate Prisma Client
+        run: |
+          cd database/prisma
+          npx prisma generate
+
+      - name: Run ESLint
+        run: |
+          cd backend
+          pnpm run lint
+
+      - name: Compile TypeScript
+        run: |
+          cd backend
+          pnpm run build
+
+      - name: Run Jest Test Suite & Generate Report
+        run: |
+          cd backend
+          pnpm run test -- --coverage --ci

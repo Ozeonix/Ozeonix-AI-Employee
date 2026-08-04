@@ -1,0 +1,94 @@
+openapi: 3.0.3
+info:
+  title: Ozeonix AI Employee - Enterprise API Specifications
+  version: 1.0.0
+  description: Official OpenAPI 3.0 specifications for Ozeonix AI Employee Business Operating System.
+servers:
+  - url: http://localhost:3000/api/v1
+    description: Local Development Environment
+paths:
+  /auth/register:
+    post:
+      summary: Register tenant company and admin
+      tags: [Authentication]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [companyName, companySlug, email, password, firstName, lastName]
+              properties:
+                companyName: { type: string }
+                companySlug: { type: string }
+                email: { type: string }
+                password: { type: string }
+                firstName: { type: string }
+                lastName: { type: string }
+      responses:
+        '201': { description: Tenant Created }
+  /auth/login:
+    post:
+      summary: User login
+      tags: [Authentication]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string }
+                password: { type: string }
+      responses:
+        '200': { description: Login Success }
+  /whatsapp/send:
+    post:
+      summary: Send WhatsApp message
+      tags: [WhatsApp]
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [toPhone, content]
+              properties:
+                toPhone: { type: string }
+                content: { type: string }
+                messageType: { type: string, enum: [TEXT, IMAGE, DOCUMENT, AUDIO, VIDEO] }
+      responses:
+        '200': { description: Message Sent }
+  /ai/generate:
+    post:
+      summary: Generate AI Employee response
+      tags: [AI Engine]
+      security: [{ BearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [conversationId, userPrompt]
+              properties:
+                conversationId: { type: string, format: uuid }
+                userPrompt: { type: string }
+                templateId: { type: string }
+      responses:
+        '200': { description: Response Generated }
+  /dashboard/summary:
+    get:
+      summary: Executive summary metrics
+      tags: [Dashboard]
+      security: [{ BearerAuth: [] }]
+      responses:
+        '200': { description: Metrics Retrieved }
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

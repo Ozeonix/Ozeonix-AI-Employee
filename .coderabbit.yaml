@@ -1,0 +1,51 @@
+# CodeRabbit AI Review & Test Verification Configuration
+# Repository: Ozeonix-AI-Employee
+
+version: "2"
+language: "en-US"
+tone_instructions: >-
+  You are an expert Enterprise Solutions Architect reviewing the Ozeonix AI Employee platform.
+  Enforce strict compliance with docs/PROJECT_CONSTITUTION.md and docs/governance/ARCHITECTURE_FREEZE_v1.0.md.
+  Verify that all unit and integration tests pass, security controls are met, and Clean Architecture layer isolation is preserved.
+
+reviews:
+  profile: "assertive"
+  request_changes_workflow: true
+  high_level_summary: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: false
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches:
+      - main
+      - develop
+
+  path_filters:
+    - "!node_modules/**"
+    - "!dist/**"
+    - "!coverage/**"
+    - "!pnpm-lock.yaml"
+
+  tools:
+    ast-grep:
+      enabled: true
+    eslint:
+      enabled: true
+    typescript:
+      enabled: true
+
+chat:
+  auto_reply: true
+
+path_instructions:
+  - path: "backend/src/**"
+    instructions: >-
+      Enforce Clean Architecture isolation (Controller -> Service -> Repository).
+      Verify Zod payload validation, custom AppError exceptions, dual JWT/API Key authentication, and multi-tenant `tenant_id` scoping.
+      Ensure Jest unit & integration tests pass cleanly.
+  - path: "database/prisma/**"
+    instructions: >-
+      Ensure every model implements mandatory audit fields (`id`, `created_at`, `updated_at`, `deleted_at`, `version`, `tenant_id`).
+      Verify that PostgreSQL indexes exist on `tenant_id` and unique fields.
