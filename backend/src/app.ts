@@ -14,6 +14,7 @@ import crmRoutes from './modules/crm/crm.routes.js';
 import employeeRoutes from './modules/employee/employee.routes.js';
 import marketingRoutes from './modules/marketing/marketing.routes.js';
 import dashboardRoutes from './modules/dashboard/dashboard.routes.js';
+import voiceRoutes from './modules/voice/voice.routes.js';
 
 const app = express();
 
@@ -39,6 +40,7 @@ app.use(`${env.API_PREFIX}/crm`, crmRoutes);
 app.use(`${env.API_PREFIX}/employees`, employeeRoutes);
 app.use(`${env.API_PREFIX}/marketing`, marketingRoutes);
 app.use(`${env.API_PREFIX}/dashboard`, dashboardRoutes);
+app.use(`${env.API_PREFIX}/voice`, voiceRoutes);
 
 // Centralized Error Handling Middleware
 app.use(errorHandlerMiddleware);
